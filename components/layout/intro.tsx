@@ -5,12 +5,17 @@ const Intro = () => {
         Blog.
       </h1>
       <h4 className="text-center md:text-left text-lg mt-5 md:pl-8">
-        A statically generated blog example using
         <a
-          href="https://nextjs.org/"
+          href="https://github.com/haijie-x"
+          className="underline hover:text-blue-600 duration-200 transition-colors mr-3"
+        >
+          Github
+        </a>
+        <a
+          href="https://juejin.cn/user/2419405559439229"
           className="underline hover:text-blue-600 duration-200 transition-colors"
         >
-          Next.js
+          JueJin
         </a>
       </h4>
     </section>
