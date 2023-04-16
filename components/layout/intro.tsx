@@ -13,9 +13,21 @@ const Intro = () => {
         </a>
         <a
           href="https://juejin.cn/user/2419405559439229"
+          className="underline hover:text-blue-600 duration-200 transition-colors mr-3"
+        >
+          掘金
+        </a>
+        <a
+          href="mailto:haijie0619@gmail.com"
+          className="underline hover:text-blue-600 duration-200 transition-colors mr-3"
+        >
+          Email
+        </a>
+        <a
+          href="https://twitter.com/xihiji2"
           className="underline hover:text-blue-600 duration-200 transition-colors"
         >
-          JueJin
+          Twitter
         </a>
       </h4>
     </section>
