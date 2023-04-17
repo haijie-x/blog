@@ -1,10 +1,8 @@
 ---
-title: "Reaction to 深入浅出Node.js"
+title: "Reaction to Node.js"
 excerpt: "《深入浅出Node.js》阅读摘录"
-coverImage: "/assets/blog/reaction-to-node-js/cover.jpg"
+coverImage: "/assets/blog/reaction-to-nodejs/cover.jpg"
 date: "2023-04-16T14:34:54.096Z"
-ogImage:
-  url: "/assets/blog/reaction-to-node-js/cover.jpg"
 ---
 
 最近在读朴灵老师的《深入学习 Node.js》，虽然这本书出版于 2013 年，距离现在已有十年，但风评都说它是 Node.js 的圣经，正好本人在学习 Node.Js，故在此做些关于该书的笔记与摘录。
