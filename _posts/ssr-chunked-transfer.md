@@ -1,7 +1,7 @@
 ---
 title: "SSR Chunked Transfer"
 excerpt: "SSR服务端渲染优化之分块/流式传输"
-coverImage: "/assets/blog/ssr-chunked-transfer/cover.webp"
+coverImage: "/assets/blog/ssr-chunked-transfer/cover.jpg"
 date: "2023-02-27T00:00:00.000Z"
 ---
 

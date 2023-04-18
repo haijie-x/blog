@@ -8,8 +8,8 @@ import Layout from "../../components/layout/layout";
 import { getPostBySlug, getAllPosts } from "../../lib/api";
 import PostTitle from "../../components/post/post-title";
 import Head from "next/head";
-import markdownToHtml from "../../lib/markdownToHtml";
 import type PostType from "../../interfaces/post";
+import { useEffect } from "react";
 
 type Props = {
   post: PostType;
@@ -23,6 +23,9 @@ export default function Post({ post, morePosts, preview }: Props) {
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
   }
+  useEffect(() => {
+    console.log(post.content);
+  }, []);
   return (
     <Layout>
       <Container>
@@ -65,14 +68,10 @@ export async function getStaticProps({ params }: Params) {
     "ogImage",
     "coverImage",
   ]);
-  const content = await markdownToHtml(post.content || "");
 
   return {
     props: {
-      post: {
-        ...post,
-        content,
-      },
+      post,
     },
   };
 }
