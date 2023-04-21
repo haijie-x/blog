@@ -22,7 +22,7 @@ const HeroPost = ({ title, coverImage, date, excerpt, slug }: Props) => {
             <Link
               as={`/posts/${slug}`}
               href="/posts/[slug]"
-              className="hover:underline"
+              className="hover:underline break-all"
             >
               {title}
             </Link>
@@ -32,7 +32,7 @@ const HeroPost = ({ title, coverImage, date, excerpt, slug }: Props) => {
           </div>
         </div>
         <div>
-          <p className="text-lg leading-relaxed mb-4">{excerpt}</p>
+          <p className="text-lg leading-relaxed mb-4 break-all">{excerpt}</p>
         </div>
       </div>
     </section>
