@@ -8,7 +8,7 @@ type Props = {
 const MoreStories = ({ posts }: Props) => {
   return (
     <section>
-      <h2 className="mb-8 text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
+      <h2 className="text-main mb-8 text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
         More Stories
       </h2>
       <div className="flex flex-col mb-32">

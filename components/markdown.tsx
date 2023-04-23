@@ -1,6 +1,8 @@
 import ReactMarkdown from "react-markdown";
-import { PrismAsyncLight } from "react-syntax-highlighter";
-import oneDark from "../styles/one-dark";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import rehypeRaw from "rehype-raw";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 const Markdown: React.FC<{
   content: string;
@@ -8,26 +10,28 @@ const Markdown: React.FC<{
   return (
     <div className="markdown-body">
       <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+        rehypePlugins={[rehypeRaw]}
+        // children={content}
         components={{
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          code({ node, inline, className, children, ...props }) {
-            // className: language-xxx  =>  xxx
-            const language = className?.split("-")[1] || "";
-            return (
-              <PrismAsyncLight
-                showLineNumbers={false}
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                style={oneDark as any}
-                language={language}
-                PreTag="div"
+          code({ node, style, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || "");
+            return !inline && match ? (
+              <SyntaxHighlighter
+                // style={nord}
+                language={match[1]}
                 {...props}
+                PreTag="div"
               >
-                {String(children)}
-              </PrismAsyncLight>
+                {String(children).replace(/\n$/, "")}
+              </SyntaxHighlighter>
+            ) : (
+              <code className={className} {...props}>
+                {children}
+              </code>
             );
           },
         }}
-        linkTarget={"_blank"}
       >
         {content}
       </ReactMarkdown>
