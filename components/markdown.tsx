@@ -3,6 +3,7 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import cn from "classnames";
 
 const Markdown: React.FC<{
   content: string;
@@ -14,19 +15,27 @@ const Markdown: React.FC<{
         rehypePlugins={[rehypeRaw]}
         // children={content}
         components={{
+          a: (props) => <a {...props} className="text-main font-bold" />,
+          h1: (props) => <h1 {...props} className="my-5 font-bold" />,
+          h2: (props) => <h2 {...props} className="my-5 font-bold" />,
+          h3: (props) => <h3 {...props} className="my-5 font-bold" />,
+          h4: (props) => <h4 {...props} className="my-3 font-bold" />,
+          h5: (props) => <h5 {...props} className="my-3 font-bold" />,
+          h6: (props) => <h6 {...props} className="my-3 font-bold" />,
+          p: (props) => <p {...props} className="my-3" />,
+          ul: (props) => <ul {...props} className="list-inside list-disc" />,
+          ol: (props) => <ol {...props} className="list-inside list-disc" />,
           code({ node, style, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "");
             return !inline && match ? (
-              <SyntaxHighlighter
-                // style={nord}
-                language={match[1]}
-                {...props}
-                PreTag="div"
-              >
+              <SyntaxHighlighter language={match[1]} {...props} PreTag="div">
                 {String(children).replace(/\n$/, "")}
               </SyntaxHighlighter>
             ) : (
-              <code className={className} {...props}>
+              <code
+                className={cn(className, "bg-gray-100	p-1 rounded m-px")}
+                {...props}
+              >
                 {children}
               </code>
             );
