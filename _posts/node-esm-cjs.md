@@ -1,9 +1,11 @@
 ---
-title: "Getting Started with (and Surviving) Node.js ESM"
+title: "Surviving ESM and CJS module Interop"
 excerpt: "深入了解、研究一下 ESM 模块 和 CJS 模块"
 coverImage: "/assets/blog/node-esm-cjs/cover.jpg"
 date: "2023-04-17T14:33:52.673Z"
 ---
+
+这篇文章将与读者一起研究一下 ESM 与 CJS 两种如今流行的模块解决方案，并探讨如何进行互操作，即`interop`。
 
 ## package.json 字段
 
@@ -62,9 +64,9 @@ exports.name = "polyfill";
 import a from "#dep";
 ```
 
-## 在 ESM 中导入 CommonJS
+## 在 ESM 中导入 CJS
 
-import 一个 CommonJS 依赖，只能进行默认对象导入，而不能进行具名导入。
+import 一个 CJS 依赖，只能进行默认对象导入，而不能进行具名导入。
 
 ```js
 // node_modules/colors/index.cjs
@@ -99,7 +101,7 @@ const { red, blue } = colors;
 exports.module_name = 'a'
 
 // node_modules/my-pkg/index.js
-const {module_name} = require('./a')
+const { module_name } = require('./a')
 exports.a_module_name = module_name
 
 // node_modules/my-pkg/wrapper.mjs
@@ -114,9 +116,9 @@ const { a_module_name } = require("my-pkg");
 console.log(a_module_name); // 'a'
 ```
 
-## 在 CommonJS 中导入 ESM
+## 在 CJS 中导入 ESM
 
-先说个坏消息，在 CommonJS 中导入 ESM 是非常痛苦的。要将 ESM 文件导入 CommonJS，必须遵守以下所有条件：\
+先说个坏消息，在 CJS 中导入 ESM 是非常痛苦的。要将 ESM 文件导入 CJS，必须遵守以下所有条件：\
 1.你必须在 Node.js 上 v12.17.0+（这适用于任何与 ESM 相关的）。\
 2.[使用动态 import()调用](https://nodejs.org/api/esm.html#import-expressions)
 
@@ -127,3 +129,95 @@ export const name = "polyfill";
 console.log(require("./esm.mjs")); // Error [ERR_REQUIRE_ESM]: require() of ES Module
 import("./esm.mjs").then((r) => console.log(r)); // [Module: null prototype] { name: 'polyfill' }
 ```
+
+## ESM 和 CJS 的 Interop(互操作) 问题
+
+对于 ESM 而言，import xxx 中的 xxx 指该模块的默认导出，这是一种语法糖，实际应该是 `import  { default as xxx }`
+
+```js
+import esm_module from "./esm_module.mjs";
+```
+
+对于 CJS 而言，import xxx 的 xxx 指该模块的所有导出 即 module.exports 或 exports 对象
+这么设计的原因是 CJS 的动态的，而 ESM 的导入是静态的。
+也就是说 ESM 通过对源码的编译即可确定依赖关系，而 CJS 需运行时才可确定依赖关系。
+所以 ESM 导入现有的 CJS 需取整个对象，即 module.exports 或 exports 对象。
+
+```js
+import cjs_module from "./cjs_module.js";
+```
+
+到这里，ESM 对于 CJS 的兼容设计似乎一点问题没有，但其实 export default xxx 为后续的 ESM 与 CJS 的 interop 问题埋下了祸根。
+
+在 ESM 被 javascript 的所有运行环境全量支持前，人们希望在此期间使用 ESM，此时就需要使用 Babel 进行 ES 到 CJS 的编译。
+
+然而这样转换带来了一个问题：如何准确地将 ESM 编译为 CJS 呢？举个例子。
+
+一个标准的 ESM 导入导出如：`export default 'foo'` 与 `import foo from 'bar'`，直观上看，转换为 CJS 应该如此：`module.exports = 'foo'` 与 `const foo = require('bar')`。但此时暴露了一个问题，该模块的导出只能固定是`foo`，如果 ESM 模块还有 `export a`、`export b`,`export c`呢，这些都导入不了了。
+
+所以，babel 是这样编译的：
+
+```js
+module.exports.default = "foo";
+// 此时 CJS 导入 将带来新问题，因为 'foo' 变成了 {default:'foo'}
+const foo = require("bar");
+```
+
+为了解决这个问题，Babel 在转化过程中，通过将属性\_\_esModule 设置为 true，标记这个模块是一个编译后的 ESM。
+
+```js
+// export
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 0;
+
+// import
+("use strict");
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
+Object.defineProperty(exports, "__esModule", { value: true });
+var bar_1 = __importDefault(require("bar"));
+consol.log("foo", bar_1.default); // 结果为0
+```
+
+> 这样通过 babel 的编译，ESM 的导入导出，会经过一层包装转化成 CJS 的导入导出，ESM 与 CJS 的交互性也趋于正常了。这个时候 Node 搞事情了，发布了 Node 的 ESM 模块实现方案，即`default` 总是等于`module.exports`，所以归根到底， default 默认导出问题 在 Node 平台与 Babel 之间出现了分歧。导致有些项目使用 Babel 编译，在 Node 环境运行就出现问题。
+
+举个例子，在 Node 环境中，`module.exports = 非对象`，会被认为是默认导出，此时`import foo` 得到 `foo`
+
+```js
+// export
+module.exports = "foo";
+// import 符合预期 'foo'
+import foo from "./foo";
+```
+
+而在 Babel 编译 ESM 为 CJS 后，得到的代码为
+
+```js
+// export
+module.exports.default = "foo";
+// 如果此时引入Babel编译后的 CJS ，就出现问题了，此时foo为 {default:'foo'}
+import foo from "./foo";
+```
+
+对于此，只能做一系列的兼容判断，以下是 esbuild 的解决方案。
+
+如果导入语句被用来加载一个 CommonJS 文件，并且
+
+- module.exports 是一个对象
+- module.exports.\_\_esModule 是 truthy
+- 文件名不是以.mjs 或.mts 结尾，package.json 文件不包含 "type": "module"
+
+那么 esbuild 将把默认导出设置为 module.exports.default（像 Babel 一样）。否则，默认出口将被设置为 module.exports（像 Node）。
+
+请注意，这意味着默认出口在以前没有被定义的情况下现在可能是未定义的。这与 Webpack 的行为相匹配，所以希望它能更加兼容。
+还要注意，这意味着导入行为现在取决于文件的扩展名和 package.json 的内容。这也符合 Webpack 的行为，希望能提高兼容性。
+
+如果一个 require 调用被用来加载一个 ES 模块文件，返回的模块命名空间对象的\*\*esModule 属性被设置为 true。这就像 ES 模块已经通过 Babel 兼容的转换被转换为 CommonJS 一样。
+
+如果导入语句或 import() 表达式被用来加载一个 ES 模块，esModule 标记现在不应该出现在模块命名空间对象上。这释放了 esModule 的导出名称，使其可以用于 ES 模块。
+
+现在允许在 ES 模块中使用 \_\_esModule 作为一个正常的导出名。这个属性可以被其他 ES 模块访问，但不能被使用 require 加载 ES 模块的代码访问，他们将会始终看到这个属性被设置为 true。

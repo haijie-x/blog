@@ -15,7 +15,7 @@
     @apply text-xl;
     @apply font-semibold;
   }
-  * {
+  body {
     color: #2d2926;
   }
 }

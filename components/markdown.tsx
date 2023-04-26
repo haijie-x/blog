@@ -25,6 +25,12 @@ const Markdown: React.FC<{
           p: (props) => <p {...props} className="my-3" />,
           ul: (props) => <ul {...props} className="list-inside list-disc" />,
           ol: (props) => <ol {...props} className="list-inside list-disc" />,
+          blockquote: (props) => (
+            <blockquote
+              {...props}
+              className="my-5 border-l-4 pl-4 text-gray-500"
+            />
+          ),
           code({ node, style, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "");
             return !inline && match ? (
@@ -33,7 +39,10 @@ const Markdown: React.FC<{
               </SyntaxHighlighter>
             ) : (
               <code
-                className={cn(className, "bg-gray-100	p-1 rounded m-px")}
+                className={cn(
+                  className,
+                  "bg-gray-100 px-1 rounded m-px decoration-clone"
+                )}
                 {...props}
               >
                 {children}
