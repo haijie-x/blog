@@ -1,11 +1,13 @@
 ---
 title: "Surviving ESM and CJS module Interop"
 excerpt: "深入了解、研究一下 ESM 模块 和 CJS 模块"
-coverImage: "/assets/blog/node-esm-cjs/cover.jpg"
+coverImage: "/assets/blog/surviving-esm-and-cjs-interop/cover.jpg"
 date: "2023-04-17T14:33:52.673Z"
 ---
 
-这篇文章将与读者一起研究一下 ESM 与 CJS 两种如今流行的模块解决方案，并探讨如何进行互操作，即`interop`。
+这篇文章将与读者一起研究一下 ESM 与 CJS 两种如今流行的模块解决方案，并探讨两种模块方案如何进行互操作/引用，如标题`interop`问题。
+
+> 先从 package.json 入手
 
 ## package.json 字段
 
@@ -216,7 +218,7 @@ import foo from "./foo";
 请注意，这意味着默认出口在以前没有被定义的情况下现在可能是未定义的。这与 Webpack 的行为相匹配，所以希望它能更加兼容。
 还要注意，这意味着导入行为现在取决于文件的扩展名和 package.json 的内容。这也符合 Webpack 的行为，希望能提高兼容性。
 
-如果一个 require 调用被用来加载一个 ES 模块文件，返回的模块命名空间对象的\*\*esModule 属性被设置为 true。这就像 ES 模块已经通过 Babel 兼容的转换被转换为 CommonJS 一样。
+如果一个 require 调用被用来加载一个 ES 模块文件，返回的模块命名空间对象的\_\_esModule 属性被设置为 true。这就像 ES 模块已经通过 Babel 兼容的转换被转换为 CommonJS 一样。
 
 如果导入语句或 import() 表达式被用来加载一个 ES 模块，esModule 标记现在不应该出现在模块命名空间对象上。这释放了 esModule 的导出名称，使其可以用于 ES 模块。
 

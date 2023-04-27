@@ -23,7 +23,13 @@ const Markdown: React.FC<{
           h5: (props) => <h5 {...props} className="my-3 font-bold" />,
           h6: (props) => <h6 {...props} className="my-3 font-bold" />,
           p: (props) => <p {...props} className="my-3" />,
-          ul: (props) => <ul {...props} className="list-inside list-disc" />,
+          ul: (props) => (
+            <ul
+              {...props}
+              // ordered={props?.ordered ? true :false}
+              className="list-inside list-disc"
+            />
+          ),
           ol: (props) => <ol {...props} className="list-inside list-disc" />,
           blockquote: (props) => (
             <blockquote
