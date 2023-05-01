@@ -1,6 +1,8 @@
-import { AppProps } from 'next/app'
-import '../styles/index.css'
+import { AppProps } from "next/app";
+import "../styles/index.css";
+import { initTheme } from "../hooks/useTheme";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  initTheme();
+  return <Component {...pageProps} />;
 }

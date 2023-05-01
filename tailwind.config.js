@@ -1,14 +1,17 @@
+import plugin from "tailwindcss/plugin";
+import {
+  themeColors,
+  themePlugin,
+  darkMode,
+} from "tailwindcss-dark-mode-plugin";
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode,
   content: ["./components/**/*.tsx", "./pages/**/*.tsx"],
   theme: {
+    colors: themeColors,
     extend: {
-      colors: {
-        layout: "#F2F2F3",
-      },
-      textColor: {
-        main: "#C8543C",
-      },
       spacing: {
         28: "7rem",
       },
@@ -30,5 +33,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [plugin(themePlugin)],
 };

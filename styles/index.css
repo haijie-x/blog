@@ -16,6 +16,6 @@
     @apply font-semibold;
   }
   body {
-    color: #2d2926;
+    @apply text-neutral-700;
   }
 }

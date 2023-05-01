@@ -15,7 +15,7 @@ const Markdown: React.FC<{
         rehypePlugins={[rehypeRaw]}
         // children={content}
         components={{
-          a: (props) => <a {...props} className="text-main font-bold" />,
+          a: (props) => <a {...props} className="text-pink-700 font-bold" />,
           h1: (props) => <h1 {...props} className="my-5 font-bold" />,
           h2: (props) => <h2 {...props} className="my-5 font-bold" />,
           h3: (props) => <h3 {...props} className="my-5 font-bold" />,
