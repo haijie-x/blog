@@ -8,9 +8,9 @@ type Props = {
 const MoreStories = ({ posts }: Props) => {
   return (
     <section>
-      <h2 className="text-pink-700 mb-8 text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
+      <h4 className="text-pink-700 my-5 text-3xl font-bold tracking-tighter leading-tight">
         More Stories
-      </h2>
+      </h4>
       <div className="flex flex-col">
         {posts.map((post) => (
           <PostPreview

@@ -4,15 +4,15 @@
 
 @layer base {
   h1 {
-    @apply text-2xl;
+    @apply text-4xl;
     @apply font-extrabold;
   }
   h2 {
-    @apply text-xl;
+    @apply text-3xl;
     @apply font-bold;
   }
   h3 {
-    @apply text-xl;
+    @apply text-2xl;
     @apply font-semibold;
   }
   body {

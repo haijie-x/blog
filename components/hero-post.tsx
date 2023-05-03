@@ -12,11 +12,11 @@ type Props = {
 
 const HeroPost = ({ title, coverImage, date, excerpt, slug }: Props) => {
   return (
-    <section className="mb-12">
-      <div className="mb-8">
+    <section>
+      <div className="mb-4">
         <CoverImage title={title} src={coverImage} slug={slug} />
       </div>
-      <h3 className="text-lg sm:text-4xl mb-4 lg:text-5xl leading-tight break-all">
+      <h3 className="text-xl mb-2 leading-tight break-all">
         <Link
           as={`/posts/${slug}`}
           href="/posts/[slug]"
@@ -25,10 +25,10 @@ const HeroPost = ({ title, coverImage, date, excerpt, slug }: Props) => {
           {title}
         </Link>
       </h3>
-      <p className="text-sm sm:text-lg leading-relaxed mb-4 break-all font-light">
+      <p className="text-l leading-relaxed mb-2 break-all font-light">
         {excerpt}
       </p>
-      <div className="text-sm sm:text-lg mb-4">
+      <div className="text-sm">
         <DateFormatter dateString={date} />
       </div>
     </section>
