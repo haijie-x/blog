@@ -1,7 +1,6 @@
 ---
 title: "Micro Front-End - MicroApp render realize"
 excerpt: "MicroApp微前端框架渲染挂载实现（WebComponent新特性）"
-coverImage: "/assets/blog/microApp-render-realize/cover.jpg"
 date: "2022-10-16T16:00:00.000Z"
 ---
 

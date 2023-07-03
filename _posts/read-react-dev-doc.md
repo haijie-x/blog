@@ -1,7 +1,6 @@
 ---
 title: "Read react dev document"
 excerpt: "阅读 React 官方文档"
-coverImage: "/assets/blog/read-react-dev-doc/cover.jpg"
 date: "2023-05-02T08:47:17.296Z"
 ---
 

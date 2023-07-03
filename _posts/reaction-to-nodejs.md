@@ -1,7 +1,6 @@
 ---
 title: "Reaction to Node.js"
 excerpt: "《深入浅出Node.js》阅读摘录"
-coverImage: "/assets/blog/reaction-to-nodejs/cover.jpg"
 date: "2023-04-16T14:34:54.096Z"
 ---
 

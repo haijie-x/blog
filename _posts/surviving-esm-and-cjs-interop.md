@@ -1,7 +1,6 @@
 ---
 title: "Surviving ESM and CJS module Interop"
 excerpt: "深入了解、研究一下 ESM 模块 和 CJS 模块"
-coverImage: "/assets/blog/surviving-esm-and-cjs-interop/cover.jpg"
 date: "2023-04-17T14:33:52.673Z"
 ---
 

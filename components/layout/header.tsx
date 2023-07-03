@@ -1,8 +1,5 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
-const ThemeSwitchButton = dynamic(() => import("../theme-switch-button"), {
-  ssr: false,
-});
 
 const Header = () => {
   return (
@@ -12,9 +9,7 @@ const Header = () => {
           Blog.
         </Link>
       </h2>
-      <div>
-        <ThemeSwitchButton />
-      </div>
+      <div></div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 ---
 title: "Carefully use allowSyntheticDefaultImports in tsconfig.json"
 excerpt: "谨慎开启 tsconfig.json 中的 allowSyntheticDefaultImports"
-coverImage: "/assets/blog/allow-synthetic-default-imports/cover.jpg"
 date: "2023-04-21T04:34:41.712Z"
 ---
 

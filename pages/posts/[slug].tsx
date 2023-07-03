@@ -1,15 +1,12 @@
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
-import Container from "../../components/layout/container";
 import PostBody from "../../components/post/post-body";
-import Header from "../../components/layout/header";
-import PostHeader from "../../components/post/post-header";
 import Layout from "../../components/layout/layout";
 import { getPostBySlug, getAllPosts } from "../../lib/api";
-import PostTitle from "../../components/post/post-title";
 import Head from "next/head";
 import type PostType from "../../interfaces/post";
-import { useEffect } from "react";
+import dynamic from "next/dynamic";
+import DateFormatter from "../../components/date-formatter";
 
 type Props = {
   post: PostType;
@@ -17,34 +14,44 @@ type Props = {
   preview?: boolean;
 };
 
+const ThemeSwitchButton = dynamic(
+  () => import("../../components/theme-switch-button/index"),
+  {
+    ssr: false,
+  }
+);
+
 export default function Post({ post, morePosts, preview }: Props) {
   const router = useRouter();
   const title = `${post.title}`;
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
   }
+
   return (
     <Layout>
-      <Container>
-        <Header />
+      <div>
         {router.isFallback ? (
-          <PostTitle>Loading…</PostTitle>
+          "Loading…"
         ) : (
           <>
             <article className="mb-32">
               <Head>
                 <title>{title}</title>
               </Head>
-              <PostHeader
-                title={post.title}
-                coverImage={post.coverImage}
-                date={post.date}
-              />
+              <div className="max-w-2xl mx-auto">
+                {title}
+                <span onClick={router.back}>BACK</span>
+                <ThemeSwitchButton />
+                <div className="mb-2 text-lg font-black">
+                  <DateFormatter dateString={post.date} />
+                </div>
+              </div>
               <PostBody content={post.content} />
             </article>
           </>
         )}
-      </Container>
+      </div>
     </Layout>
   );
 }
@@ -63,7 +70,6 @@ export async function getStaticProps({ params }: Params) {
     "author",
     "content",
     "ogImage",
-    "coverImage",
   ]);
 
   return {
