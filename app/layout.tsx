@@ -1,12 +1,12 @@
-import Link from "next/link"
-import "./global.css"
-import { Inter } from "next/font/google"
-import ModeToggle from "@/components/mode-toggle"
+import Link from "next/link";
+import "./global.css";
+import { Inter } from "next/font/google";
+import ModeToggle from "@/components/mode-toggle";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 interface RootLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
@@ -28,10 +28,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <main>{children}</main>
           <footer className="mt-10">
             <hr className="my-4" />
-            <small>@ Hai</small>
+            <small className="flex justify-between">
+              @ Hai
+              <nav className="underline decoration-1">
+                <Link href="https://github.com/haijie-x" className="mr-3">
+                  github
+                </Link>
+                <Link href="https://twitter.com/__haijie">twitter</Link>
+              </nav>
+            </small>
           </footer>
         </div>
       </body>
     </html>
-  )
+  );
 }
